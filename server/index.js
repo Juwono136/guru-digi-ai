@@ -41,6 +41,10 @@ app.post("/api/generate/rubrik", rubrikGenerator);
 app.post("/api/generate/ice-breaking", iceBreakingGenerator);
 app.post("/api/generate/curhat", curhatGenerator);
 
-app.listen(PORT, () => {
-  console.log(`Server backend berjalan di Port: ${PORT}`);
-});
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`Server LOKAL berjalan di http://localhost:${PORT}`);
+  });
+}
+
+export default app;
