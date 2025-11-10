@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+@media print {
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Memastikan konten hasil tidak terpotong oleh margin halaman */
+  @page {
+    margin: 0.5in;
+  }
+}
