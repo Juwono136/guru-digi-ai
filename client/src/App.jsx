@@ -41,19 +41,6 @@ function App() {
           }
         />
 
-        {/* Rute Terlindungi lainnya bisa ditambahkan di sini */}
-        {/* <Route
-          path="/generator-rpp"
-          element={
-            <ProtectedRoute>
-              <RppGenerator />
-            </ProtectedRoute>
-          }
-        /> */}
-
-        {/* Redirect jika tidak ada rute yang cocok
-          Ini bisa disesuaikan, mungkin redirect ke "/" atau halaman 404
-      */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </>
