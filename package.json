@@ -2,7 +2,7 @@
   "name": "guru-digi-ai",
   "version": "1.0.0",
   "scripts": {
-    "start": "concurrently \"npm run start --prefix server\" \"npm run dev --prefix client\""
+    "start": "concurrently \"npm run start --prefix api\" \"npm run dev --prefix client\""
   },
   "devDependencies": {
     "concurrently": "^9.2.1"
