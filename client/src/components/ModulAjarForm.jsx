@@ -12,6 +12,8 @@ const kelasData = {
   SD: ["1", "2", "3", "4", "5", "6"],
   SMP: ["7", "8", "9"],
   SMA: ["10", "11", "12"],
+  SMK: ["10", "11", "12", "13"],
+  Umum: ["Umum"],
 };
 
 const ModulAjarForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
@@ -78,6 +80,8 @@ const ModulAjarForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
             <option value="SD">SD</option>
             <option value="SMP">SMP</option>
             <option value="SMA">SMA</option>
+            <option value="SMK">SMK</option>
+            <option value="Umum">Umum</option>
           </select>
           <FiChevronDown className="absolute right-3 top-9 h-5 w-5 text-gray-400 pointer-events-none" />
         </div>
@@ -111,11 +115,33 @@ const ModulAjarForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
           className="w-full px-3 py-2 border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="">Pilih Mata Pelajaran</option>
-          <option value="Pendidikan Agama">Pendidikan Agama</option>
+          <option value="Pendidikan Agama dan Budi Pekerti">
+            Pendidikan Agama dan Budi Pekerti
+          </option>
+          <option value="Pendidikan Pancasila">Pendidikan Pancasila</option>
           <option value="Bahasa Indonesia">Bahasa Indonesia</option>
           <option value="Matematika">Matematika</option>
-          <option value="IPA">IPA</option>
-          <option value="IPS">IPS</option>
+          <option value="Pendidikan Jasmani, Olahraga, dan Kesehatan (PJOK)">
+            Pendidikan Jasmani, Olahraga, dan Kesehatan (PJOK)
+          </option>
+          <option value="Seni Budaya">Seni Budaya</option>
+          <option value="Bahasa Inggris">Bahasa Inggris</option>
+          <option value="Muatan Lokal">Muatan Lokal</option>
+          <option value="Ilmu Pengetahuan Alam (IPA)">Ilmu Pengetahuan Alam (IPA)</option>
+          <option value="Ilmu Pengetahuan Sosial (IPS)">Ilmu Pengetahuan Sosial (IPS)</option>
+          <option value="Informatika">Informatika</option>
+          <option value="Pendidikan Kewarganegaraan">Pendidikan Kewarganegaraan</option>
+          <option value="Fisika">Fisika</option>
+          <option value="Kimia">Kimia</option>
+          <option value="Biologi">Biologi</option>
+          <option value="Ekonomi">Ekonomi</option>
+          <option value="Antropologi">Antropologi</option>
+          <option value="Geografi">Geografi</option>
+          <option value="Sosiologi">Sosiologi</option>
+          <option value="Prakarya">Prakarya</option>
+          <option value="Kewirausahaan">Kewirausahaan</option>
+          <option value="Vokasi">Vokasi</option>
+          <option value="Lainnya/Kustom">Lainnya/Kustom</option>
         </select>
         <FiChevronDown className="absolute right-3 top-9 h-5 w-5 text-gray-400 pointer-events-none" />
       </div>
