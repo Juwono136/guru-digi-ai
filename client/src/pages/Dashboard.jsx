@@ -55,7 +55,7 @@ const navLinks = [
   { title: "Bank Soal", icon: <FiHelpCircle />, tabName: "soal" },
   { title: "Rubrik Penilaian", icon: <FiGrid />, tabName: "rubrik" },
   { title: "Ice Breaking", icon: <FiSmile />, tabName: "iceBreaking" },
-  { title: "CurhatBareng", icon: <FiHeart />, tabName: "curhat" },
+  { title: "Curhat Bareng", icon: <FiHeart />, tabName: "curhat" },
 ];
 
 // Tab button
