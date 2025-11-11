@@ -49,9 +49,9 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     logout: (state) => {
-      if (firebaseAuth.currentUser) {
-        firebaseAuth.signOut();
-      }
+      // if (firebaseAuth.currentUser) {
+      //   firebaseAuth.signOut();
+      // }
       state.isLoggedIn = false;
       state.user = null;
       state.status = "idle";
