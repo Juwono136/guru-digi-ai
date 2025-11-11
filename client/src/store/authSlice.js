@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { auth as firebaseAuth } from "../firebase.config";
+// import { auth as firebaseAuth } from "../firebase.config";
 // import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 import api from "../api/axiosInstance";

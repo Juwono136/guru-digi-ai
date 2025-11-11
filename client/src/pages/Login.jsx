@@ -59,7 +59,7 @@ const Login = () => {
       <div className="p-8 bg-white rounded-xl shadow-lg w-full max-w-sm m-4">
         <h2 className="text-2xl font-bold text-center text-gray-800 mb-2">Login Ke Guru Digi AI</h2>
         <p className="text-sm text-gray-600 text-center mb-6">
-          Asistan Guru Berbasis AI yang membantu kamu!
+          Asisten Guru Berbasis AI yang membantu kamu!
         </p>
 
         <form onSubmit={handlePasswordLogin}>
