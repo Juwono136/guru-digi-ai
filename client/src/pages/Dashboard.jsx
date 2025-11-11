@@ -1,16 +1,19 @@
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../store/authSlice";
-import { clearResult } from "../store/generatorSlice";
 import toast from "react-hot-toast";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
+import rehypeRaw from "rehype-raw";
+import { saveAs } from "file-saver";
 
-// Ikon
+// Assets and icons
 import {
   FiLogOut,
   FiChevronDown,
   FiFileText,
   FiTarget,
-  FiBookOpen,
   FiChevronUp,
   FiCopy,
   FiPrinter,
@@ -24,19 +27,11 @@ import {
   FiHeart,
 } from "react-icons/fi";
 import { FaUserCircle } from "react-icons/fa";
+import LogoImg from "../assets/logo.png";
 
-// Komponen
+// Components
 import ConfirmModal from "../components/ConfirmModal";
 import LoadingSpinner from "../components/LoadingSpinner";
-
-// --- STACK REACT-MARKDOWN (YANG DIMINTA) ---
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm"; // <-- Plugin untuk Tabel
-import remarkMath from "remark-math"; // <-- Plugin untuk $matematika$
-import rehypeKatex from "rehype-katex"; // <-- Plugin untuk merender rumus
-import rehypeRaw from "rehype-raw";
-import { saveAs } from "file-saver";
-
 import ModulAjarForm from "../components/ModulAjarForm";
 import LkpdForm from "../components/LkpdForm";
 import PresentasiForm from "../components/PresentasiForm";
@@ -46,6 +41,11 @@ import RubrikForm from "../components/RubrikForm";
 import IceBreakingForm from "../components/IceBreakingForm";
 import CurhatForm from "../components/CurhatForm";
 
+// Features
+import { logout } from "../store/authSlice";
+import { clearResult } from "../store/generatorSlice";
+
+// Tab button
 const TabButton = ({ title, icon, isActive, onClick }) => {
   return (
     <button
@@ -62,32 +62,27 @@ const TabButton = ({ title, icon, isActive, onClick }) => {
   );
 };
 
+// Komponen dashboard
 const Dashboard = () => {
   const dispatch = useDispatch();
 
   const { user } = useSelector((state) => state.auth);
-  const {
-    result: hasilAI, // Teks MARKDOWN mentah dari AI
-    status,
-    error,
-  } = useSelector((state) => state.generator);
+  const { result: hasilAI, status, error } = useSelector((state) => state.generator);
 
   const isLoading = status === "loading";
-  const outputRef = useRef(null); // Ref untuk div hasil
+  const outputRef = useRef(null);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFormDirty, setIsFormDirty] = useState(false);
   const [isFormVisible, setIsFormVisible] = useState(true);
   const [activeTab, setActiveTab] = useState("modulAjar");
 
-  // useEffect untuk error generator
   useEffect(() => {
     if (status === "failed" && error) {
       toast.error(`Error: ${error}`);
     }
   }, [status, error]);
 
-  // useEffect untuk peringatan refresh
   useEffect(() => {
     const handleBeforeUnload = (e) => {
       if (isFormDirty) {
@@ -101,7 +96,6 @@ const Dashboard = () => {
     };
   }, [isFormDirty]);
 
-  // --- Handler Tombol ---
   const handleLogoutClick = () => setIsModalOpen(true);
 
   const confirmLogout = () => {
@@ -111,9 +105,6 @@ const Dashboard = () => {
     setIsModalOpen(false);
   };
 
-  // --- FUNGSI AKSI BARU (LANGKAH 5) ---
-
-  // 1. Salin Teks
   const handleCopy = () => {
     if (!outputRef.current || !hasilAI) {
       toast.error("Tidak ada konten untuk disalin.");
@@ -125,7 +116,6 @@ const Dashboard = () => {
       .catch(() => toast.error("Gagal menyalin teks."));
   };
 
-  // 2. Download Word (METODE STABIL)
   const handleDownloadWord = () => {
     if (!outputRef.current || !hasilAI) {
       toast.error("Tidak ada konten untuk diunduh.");
@@ -137,7 +127,6 @@ const Dashboard = () => {
     try {
       const htmlContent = outputRef.current.innerHTML;
 
-      // Trik "HTML-doc". Kita bungkus HTML kita dengan tag standar Word
       const header = `<html xmlns:o='urn:schemas-microsoft-com:office:office' 
       xmlns:w='urn:schemas-microsoft-com:office:word' 
       xmlns='http://www.w3.org/TR/REC-html40'>
@@ -154,7 +143,6 @@ const Dashboard = () => {
       });
 
       saveAs(blob, `guru-digi-${activeTab}.doc`);
-      // .doc adalah kuncinya. Ini memaksa Word untuk membuka file HTML
 
       toast.success("File Word (.doc) berhasil dibuat!", { id: toastId });
     } catch (e) {
@@ -163,7 +151,6 @@ const Dashboard = () => {
     }
   };
 
-  // 3. Cetak / PDF
   const handlePrint = () => {
     if (!outputRef.current || !hasilAI) {
       toast.error("Tidak ada konten untuk dicetak.");
@@ -174,8 +161,8 @@ const Dashboard = () => {
 
   const handleTabChange = (tabName) => {
     setActiveTab(tabName);
-    dispatch(clearResult()); // Hapus hasil AI lama
-    setIsFormDirty(false); // Reset status form
+    dispatch(clearResult());
+    setIsFormDirty(false);
   };
 
   const tabTitles = {
@@ -196,9 +183,9 @@ const Dashboard = () => {
         <nav className="bg-white shadow-sm sticky top-0 z-10 print:hidden">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between h-16">
-              <div className="flex items-center">
-                <FiBookOpen className="h-6 w-6 text-blue-600 mr-2" />
-                <h1 className="text-xl font-bold text-gray-800">Asisten Guru AI</h1>
+              <div className="flex items-center justify-center gap-1">
+                <img src={LogoImg} alt="Logo Image" className="h-6 w-6" />
+                <h1 className="text-xl font-bold text-gray-800">Guru Digi AI</h1>
               </div>
               <div className="flex items-center">
                 {user && (
@@ -226,9 +213,8 @@ const Dashboard = () => {
         {/* Konten Utama Dashboard */}
         <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 print:py-0">
           <div className="flex flex-col lg:flex-row lg:gap-8 print:block">
-            {/* Kolom 1: Form Generator */}
+            {/* Form Generator */}
             <div className="lg:w-1/3 bg-white p-6 rounded-xl shadow-lg h-fit lg:sticky lg:top-24 mb-8 lg:mb-0 print:hidden">
-              {/* --- UI TABS BARU --- */}
               <div className="mb-4 border-b border-gray-200">
                 <div className="flex overflow-x-auto whitespace-nowrap">
                   <TabButton
@@ -280,11 +266,10 @@ const Dashboard = () => {
                     isActive={activeTab === "curhat"}
                     onClick={() => handleTabChange("curhat")}
                   />
-                  {/* Tambahkan tab baru di sini nanti */}
                 </div>
               </div>
 
-              {/* --- Judul & Tombol Dropdown (RESPONSIF) --- */}
+              {/* --- Judul & Tombol Dropdown --- */}
               <div
                 className="flex justify-between items-center cursor-pointer lg:cursor-default"
                 onClick={() => window.innerWidth < 1024 && setIsFormVisible(!isFormVisible)}
@@ -301,13 +286,11 @@ const Dashboard = () => {
                 </button>
               </div>
 
-              {/* --- KONTEN FORM DINAMIS --- */}
               <div
                 className={`transition-all duration-500 ease-in-out overflow-hidden ${
                   isFormVisible ? "max-h-[2000px] opacity-100 mt-6" : "max-h-0 opacity-0"
                 } lg:max-h-none lg:opacity-100 lg:mt-6`}
               >
-                {/* Render form berdasarkan activeTab, pass state props */}
                 {activeTab === "modulAjar" && (
                   <ModulAjarForm
                     isFormDirty={isFormDirty}
@@ -372,7 +355,7 @@ const Dashboard = () => {
               </div>
             </div>
 
-            {/* Kolom 2: Hasil Generasi AI */}
+            {/* Hasil Generasi AI */}
             <div className="lg:w-2/3 bg-white p-6 rounded-xl shadow-lg print:w-full print:shadow-none print:p-0 flex flex-col min-h-[80vh] lg:min-h-0">
               <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 print:hidden">
                 <h2 className="text-2xl font-semibold text-gray-900 flex items-center">
@@ -409,7 +392,6 @@ const Dashboard = () => {
               </div>
 
               <div className="h-[60vh] lg:h-full overflow-y-auto rounded-lg bg-gray-50 p-4 border print:h-auto print:overflow-visible print:border-none print:p-0">
-                {/* Area Konten Hasil AI (sekarang di dalam wrapper scroll) */}
                 {isLoading && <LoadingSpinner />}
 
                 {!isLoading && hasilAI && (

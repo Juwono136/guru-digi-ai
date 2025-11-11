@@ -1,8 +1,12 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { generateModulAjar } from "../store/generatorSlice";
 import toast from "react-hot-toast";
+
+// Assets and icons
 import { FiZap, FiChevronDown } from "react-icons/fi";
+
+// Features
+import { generateModulAjar } from "../store/generatorSlice";
 
 const kelasData = {
   SD: ["1", "2", "3", "4", "5", "6"],
@@ -61,7 +65,6 @@ const ModulAjarForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 p-1">
-      {/* Baris 1: Jenjang & Kelas */}
       <div className="grid grid-cols-2 gap-4">
         <div className="relative">
           <label className="block text-sm font-medium text-gray-700 mb-1">Jenjang</label>
@@ -78,6 +81,7 @@ const ModulAjarForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
           </select>
           <FiChevronDown className="absolute right-3 top-9 h-5 w-5 text-gray-400 pointer-events-none" />
         </div>
+
         <div className="relative">
           <label className="block text-sm font-medium text-gray-700 mb-1">Kelas</label>
           <select
@@ -98,7 +102,6 @@ const ModulAjarForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         </div>
       </div>
 
-      {/* Baris 2: Mata Pelajaran */}
       <div className="relative">
         <label className="block text-sm font-medium text-gray-700 mb-1">Mata Pelajaran</label>
         <select
@@ -117,7 +120,6 @@ const ModulAjarForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         <FiChevronDown className="absolute right-3 top-9 h-5 w-5 text-gray-400 pointer-events-none" />
       </div>
 
-      {/* Baris 3: Mapel Kustom */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Mata Pelajaran Kustom (Opsional)
@@ -132,7 +134,8 @@ const ModulAjarForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         />
       </div>
 
-      {/* Baris 4: Topik/Materi */}
+      <hr className="my-4 border-t border-gray-200" />
+
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">Topik/Materi Utama</label>
         <input
@@ -145,7 +148,6 @@ const ModulAjarForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         />
       </div>
 
-      {/* Baris 5: Capaian/Tujuan */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Capaian Pembelajaran/Tujuan
@@ -160,7 +162,6 @@ const ModulAjarForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         ></textarea>
       </div>
 
-      {/* Baris 6: Model & Alokasi */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">Model Pembelajaran</label>
         <input
@@ -184,7 +185,6 @@ const ModulAjarForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         />
       </div>
 
-      {/* Baris 7: Instruksi Khusus */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Instruksi Khusus (Opsional)
@@ -199,7 +199,6 @@ const ModulAjarForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         ></textarea>
       </div>
 
-      {/* Tombol Submit */}
       <button
         type="submit"
         disabled={isLoading}

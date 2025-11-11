@@ -1,14 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import api from "../api/axiosInstance"; // Gunakan axios instance kita
 
-// 1. Definisikan Async Thunk
+import api from "../api/axiosInstance";
+
 export const generateModulAjar = createAsyncThunk(
   "generator/generateModulAjar",
   async (formData, { rejectWithValue }) => {
     try {
-      // Kirim formData ke endpoint backend yang baru kita buat
       const response = await api.post("/generate/modul-ajar", formData);
-      return response.data.data; // Kirim payload 'data' (hasil teks AI)
+      return response.data.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
@@ -19,9 +18,8 @@ export const generateLkpd = createAsyncThunk(
   "generator/generateLkpd",
   async (formData, { rejectWithValue }) => {
     try {
-      // Panggil endpoint backend baru kita
       const response = await api.post("/generate/lkpd", formData);
-      return response.data.data; // Kirim payload (hasil teks AI)
+      return response.data.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
@@ -40,7 +38,6 @@ export const generatePresentasi = createAsyncThunk(
   }
 );
 
-// --- TAMBAHKAN THUNK BARU INI ---
 export const generateMateri = createAsyncThunk(
   "generator/generateMateri",
   async (formData, { rejectWithValue }) => {
@@ -57,8 +54,6 @@ export const generateSoal = createAsyncThunk(
   "generator/generateSoal",
   async (formData, { rejectWithValue }) => {
     try {
-      // NOTE: Saat ini kita hanya mengirim JSON.
-      // Jika nanti kita tambah file upload, ini harus diubah ke FormData
       const response = await api.post("/generate/soal", formData);
       return response.data.data;
     } catch (error) {
@@ -103,19 +98,16 @@ export const generateCurhat = createAsyncThunk(
   }
 );
 
-// 2. Definisikan Initial State
 const initialState = {
-  result: "", // Menyimpan hasil AI (teks/markdown)
+  result: "",
   status: "idle", // 'idle' | 'loading' | 'succeeded' | 'failed'
   error: null,
 };
 
-// 3. Buat Slice
 const generatorSlice = createSlice({
   name: "generator",
   initialState,
   reducers: {
-    // Aksi untuk membersihkan hasil
     clearResult: (state) => {
       state.result = "";
       state.status = "idle";
@@ -127,12 +119,12 @@ const generatorSlice = createSlice({
       // Modul ajar slice
       .addCase(generateModulAjar.pending, (state) => {
         state.status = "loading";
-        state.result = ""; // Bersihkan hasil lama
+        state.result = "";
         state.error = null;
       })
       .addCase(generateModulAjar.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.result = action.payload; // Simpan hasil AI
+        state.result = action.payload;
       })
       .addCase(generateModulAjar.rejected, (state, action) => {
         state.status = "failed";

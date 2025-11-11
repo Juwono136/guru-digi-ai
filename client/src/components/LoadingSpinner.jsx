@@ -3,12 +3,7 @@ const LoadingSpinner = () => {
     <div className="flex justify-center items-center h-full py-10">
       <div className="flex space-x-2">
         <span className="sr-only">Sedang membuat...</span>
-        {/*
-          Tailwind 'animate-pulse' adalah efek shimmer.
-          Untuk efek 'bounce' 3 titik, kita perlu keyframe kustom.
-          Mari kita gunakan 'animate-pulse' untuk kesederhanaan.
-          Untuk versi "AI" (bouncing dots):
-        */}
+
         <style>
           {`
             @keyframes ai-bounce {

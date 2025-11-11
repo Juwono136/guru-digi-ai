@@ -1,19 +1,17 @@
+// Assets and icons
 import { FiX, FiAlertTriangle } from "react-icons/fi";
 
-// Modal ini menggunakan 'Fragments' dan 'Portals' (via div 'modal-root' jika ada)
-// Tapi untuk kesederhanaan, kita gunakan 'fixed' position
 const ConfirmModal = ({ isOpen, onClose, onConfirm, title, children }) => {
   if (!isOpen) return null;
 
   return (
     <>
-      {/* 1. Latar Belakang Overlay */}
       <div
         className="fixed inset-0 z-40 bg-black opacity-80 backdrop-blur-sm"
         onClick={onClose}
       ></div>
 
-      {/* 2. Konten Modal */}
+      {/* Konten Modal */}
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
         <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
           {/* Header Modal */}
@@ -30,7 +28,7 @@ const ConfirmModal = ({ isOpen, onClose, onConfirm, title, children }) => {
           {/* Body Modal */}
           <div className="p-6 text-gray-600">{children}</div>
 
-          {/* Footer (Tombol Aksi) */}
+          {/* Footer */}
           <div className="flex justify-end space-x-3 bg-gray-50 p-4 rounded-b-lg">
             <button
               onClick={onClose}

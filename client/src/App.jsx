@@ -1,8 +1,12 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
+
+// Components
+import ProtectedRoute from "./components/ProtectedRoute";
+
+// Pages
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-import ProtectedRoute from "./components/ProtectedRoute";
 import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
@@ -18,10 +22,10 @@ function App() {
         }}
       />
       <Routes>
-        {/* Rute Publik: Halaman Login */}
+        {/* Halaman Login */}
         <Route path="/login" element={<Login />} />
 
-        {/* Rute Terlindungi: Dashboard */}
+        {/* Dashboard */}
         <Route
           path="/dashboard"
           element={

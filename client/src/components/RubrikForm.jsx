@@ -1,16 +1,18 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { generateRubrik } from "../store/generatorSlice"; // <-- Aksi baru
 import toast from "react-hot-toast";
+
+// Assets and icons
 import { FiZap, FiChevronDown } from "react-icons/fi";
 
-// Terima props yang sama persis dengan form lainnya
+// Features
+import { generateRubrik } from "../store/generatorSlice";
+
 const RubrikForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
   const dispatch = useDispatch();
   const { status } = useSelector((state) => state.generator);
   const isLoading = status === "loading";
 
-  // State diganti untuk field Rubrik
   const [formData, setFormData] = useState({
     jenjang: "",
     mapel: "",
@@ -26,7 +28,6 @@ const RubrikForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
     if (!isFormDirty) setIsFormDirty(true);
   };
 
-  // Handler Submit diubah untuk Rubrik
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.jenjang || !formData.mapel || !formData.jenisTugas || !formData.kriteria) {
@@ -45,7 +46,6 @@ const RubrikForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 p-1">
-      {/* Baris 1: Jenjang (Full-width, karena tidak ada 'Kelas') */}
       <div className="relative">
         <label className="block text-sm font-medium text-gray-700 mb-1">Jenjang</label>
         <select
@@ -63,7 +63,6 @@ const RubrikForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         <FiChevronDown className="absolute right-3 top-9 h-5 w-5 text-gray-400 pointer-events-none" />
       </div>
 
-      {/* Baris 2: Mata Pelajaran (Salin) */}
       <div className="relative">
         <label className="block text-sm font-medium text-gray-700 mb-1">Mata Pelajaran</label>
         <select
@@ -83,7 +82,6 @@ const RubrikForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         <FiChevronDown className="absolute right-3 top-9 h-5 w-5 text-gray-400 pointer-events-none" />
       </div>
 
-      {/* Baris 3: Mapel Kustom (Salin) */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Mata Pelajaran Kustom (Opsional)
@@ -100,7 +98,6 @@ const RubrikForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
 
       <hr className="my-4 border-t border-gray-200" />
 
-      {/* Baris 4: Jenis Tugas */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">Jenis Tugas</label>
         <input
@@ -113,7 +110,6 @@ const RubrikForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         />
       </div>
 
-      {/* Baris 5: Kriteria Penilaian Spesifik */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Kriteria Penilaian Spesifik
@@ -128,7 +124,6 @@ const RubrikForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         ></textarea>
       </div>
 
-      {/* Baris 6: Instruksi Khusus (Opsional) */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Instruksi Khusus (Opsional)
@@ -143,7 +138,6 @@ const RubrikForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         ></textarea>
       </div>
 
-      {/* Tombol Submit */}
       <button
         type="submit"
         disabled={isLoading}

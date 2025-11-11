@@ -1,9 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { loginWithPassword, loginWithGoogle, resetAuthStatus } from "../store/authSlice";
 import toast from "react-hot-toast";
-import { FcGoogle } from "react-icons/fc";
+
+// Assets and icons
+// import { FcGoogle } from "react-icons/fc";
+
+// Features
+import { loginWithPassword, resetAuthStatus } from "../store/authSlice";
 
 const Login = () => {
   const [password, setPassword] = useState("");
@@ -14,23 +18,15 @@ const Login = () => {
   const { isLoggedIn, status, error } = useSelector((state) => state.auth);
   const from = location.state?.from?.pathname || "/dashboard";
 
-  // LOGIKA PEMBERSIHAN (CLEANUP) YANG BENAR
   useEffect(() => {
-    // 1. Menangani jika aksi login GAGAL (termasuk dibatalkan)
     if (status === "failed") {
-      // Hanya tampilkan toast jika itu error sungguhan, BUKAN dibatalkan
       if (error && error !== "auth/popup-closed-by-user") {
         toast.error(error);
       }
 
-      // PENTING: Selalu reset status kembali ke 'idle' setelah 'failed'
-      // Ini akan "membuka" kembali tombol-tombol yang disable
-      // Ini juga memastikan saat refresh, 'status' adalah 'idle' (dari initialState)
-      // sehingga toast error tidak akan muncul lagi.
       dispatch(resetAuthStatus());
     }
 
-    // 2. Menangani jika aksi login SUKSES
     if (status === "succeeded" && isLoggedIn) {
       toast.success("Login berhasil!");
       navigate(from, { replace: true });
@@ -38,7 +34,6 @@ const Login = () => {
       dispatch(resetAuthStatus());
     }
 
-    // 3. Menangani jika pengguna SUDAH login (dari persist)
     if (isLoggedIn && status === "idle") {
       navigate(from, { replace: true });
     }
@@ -51,13 +46,12 @@ const Login = () => {
     }
   };
 
-  const handleGoogleLogin = () => {
-    if (status !== "loading") {
-      dispatch(loginWithGoogle());
-    }
-  };
+  // const handleGoogleLogin = () => {
+  //   if (status !== "loading") {
+  //     dispatch(loginWithGoogle());
+  //   }
+  // };
 
-  // Kita buat variabel isLoading agar lebih rapi
   const isLoading = status === "loading";
 
   return (
@@ -89,21 +83,20 @@ const Login = () => {
           </button>
         </form>
 
-        <div className="my-6 flex items-center justify-center">
+        {/* <div className="my-6 flex items-center justify-center">
           <div className="border-t border-gray-300 grow"></div>
           <span className="mx-4 text-gray-500 text-xs uppercase font-semibold">ATAU</span>
           <div className="border-t border-gray-300 grow"></div>
-        </div>
+        </div> */}
 
-        <button
+        {/* <button
           onClick={handleGoogleLogin}
           disabled={isLoading}
           className="w-full flex items-center justify-center py-2.5 border border-gray-300 rounded-md font-medium text-gray-700 hover:bg-gray-50 transition duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <FcGoogle className="mr-2 text-xl" />
-          {/* Tambahkan logika loading di sini agar konsisten */}
           {isLoading ? "Memeriksa..." : "Login dengan Google"}
-        </button>
+        </button> */}
       </div>
     </div>
   );

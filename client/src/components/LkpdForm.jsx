@@ -1,37 +1,37 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { generateLkpd } from "../store/generatorSlice"; // <-- Ganti ke generateLkpd
 import toast from "react-hot-toast";
+
+// Assets and icons
 import { FiZap, FiChevronDown } from "react-icons/fi";
 
-// Data untuk dropdown dinamis (sama)
+// Features
+import { generateLkpd } from "../store/generatorSlice";
+
 const kelasData = {
   SD: ["1", "2", "3", "4", "5", "6"],
   SMP: ["7", "8", "9"],
   SMA: ["10", "11", "12"],
 };
 
-// Terima props yang sama persis dengan ModulAjarForm
 const LkpdForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
   const dispatch = useDispatch();
   const { status } = useSelector((state) => state.generator);
   const isLoading = status === "loading";
 
-  // State diganti untuk field LKPD
   const [formData, setFormData] = useState({
     jenjang: "",
     kelas: "",
     mapel: "",
     mapelKustom: "",
-    judul: "", // <-- Field LKPD
-    kompetensi: "", // <-- Field LKPD
-    petunjuk: "", // <-- Field LKPD
-    instruksiTugas: "", // <-- Field LKPD
-    instruksi: "", // <-- Field LKPD (Instruksi Khusus)
+    judul: "",
+    kompetensi: "",
+    petunjuk: "",
+    instruksiTugas: "",
+    instruksi: "",
   });
   const [kelasOptions, setKelasOptions] = useState([]);
 
-  // Handler ini sama persis
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -49,16 +49,14 @@ const LkpdForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
     if (!isFormDirty) setIsFormDirty(true);
   };
 
-  // Handler Submit diubah untuk LKPD
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Validasi diubah ke field LKPD
     if (!formData.jenjang || !formData.kelas || !formData.judul) {
       toast.error("Jenjang, Kelas, dan Judul LKPD wajib diisi!");
       return;
     }
     toast.success("Permintaan LKPD dikirim ke AI... mohon tunggu...");
-    dispatch(generateLkpd(formData)); // <-- Dispatch aksi generateLkpd
+    dispatch(generateLkpd(formData));
     setIsFormDirty(false);
     if (window.innerWidth < 1024) {
       setIsFormVisible(false);
@@ -67,9 +65,6 @@ const LkpdForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 p-1">
-      {/* --- Bagian A: Info Umum (Sama seperti Modul Ajar) --- */}
-
-      {/* Baris 1: Jenjang & Kelas (Salin dari ModulAjarForm) */}
       <div className="grid grid-cols-2 gap-4">
         <div className="relative">
           <label className="block text-sm font-medium text-gray-700 mb-1">Jenjang</label>
@@ -106,7 +101,6 @@ const LkpdForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         </div>
       </div>
 
-      {/* Baris 2: Mata Pelajaran (Salin dari ModulAjarForm) */}
       <div className="relative">
         <label className="block text-sm font-medium text-gray-700 mb-1">Mata Pelajaran</label>
         <select
@@ -125,7 +119,6 @@ const LkpdForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         <FiChevronDown className="absolute right-3 top-9 h-5 w-5 text-gray-400 pointer-events-none" />
       </div>
 
-      {/* Baris 3: Mapel Kustom (Salin dari ModulAjarForm) */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Mata Pelajaran Kustom (Opsional)
@@ -140,10 +133,8 @@ const LkpdForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         />
       </div>
 
-      {/* --- Bagian B: Info Spesifik LKPD --- */}
       <hr className="my-4 border-t border-gray-200" />
 
-      {/* Baris 4: Judul LKPD/Aktivitas */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">Judul LKPD/Aktivitas</label>
         <input
@@ -156,7 +147,6 @@ const LkpdForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         />
       </div>
 
-      {/* Baris 5: Kompetensi Dasar/Materi Pokok */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Kompetensi Dasar atau Materi Pokok
@@ -171,7 +161,6 @@ const LkpdForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         ></textarea>
       </div>
 
-      {/* Baris 6: Petunjuk Belajar & Tujuan Pembelajaran */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Petunjuk Belajar & Tujuan Pembelajaran
@@ -186,7 +175,6 @@ const LkpdForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         ></textarea>
       </div>
 
-      {/* Baris 7: Instruksi Tugas Utama */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Instruksi Tugas Utama (Isian, Eksperimen, dll)
@@ -201,7 +189,6 @@ const LkpdForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         ></textarea>
       </div>
 
-      {/* Baris 8: Instruksi Khusus (Sama seperti ModulAjarForm) */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Instruksi Khusus (Opsional)
@@ -216,14 +203,12 @@ const LkpdForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         ></textarea>
       </div>
 
-      {/* Tombol Submit */}
       <button
         type="submit"
         disabled={isLoading}
         className="w-full flex justify-center items-center bg-blue-600 text-white py-3 rounded-md font-semibold hover:bg-blue-700 transition duration-300 disabled:opacity-50"
       >
         <FiZap className="mr-2" />
-        {/* Ganti teks tombol */}
         {isLoading ? "Sedang Membuat..." : "Hasilkan LKPD"}
       </button>
     </form>

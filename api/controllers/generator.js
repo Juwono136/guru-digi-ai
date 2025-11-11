@@ -1,7 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// --- FUNGSI HELPER GEMINI ---
-// Fungsi ini mengubah buffer file (dari multer) menjadi format API Gemini
+// Fungsi untuk mengubah buffer file (dari multer) menjadi format Gemini API
 function fileToGenerativePart(buffer, mimeType) {
   return {
     inlineData: {
@@ -11,12 +10,12 @@ function fileToGenerativePart(buffer, mimeType) {
   };
 }
 
+// Fungsi modul ajar generator
 export const modulAjarGenerator = async (req, res) => {
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
   const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
   try {
-    // 1. Ambil data form dari request frontend
     const {
       jenjang,
       kelas,
@@ -103,12 +102,12 @@ export const modulAjarGenerator = async (req, res) => {
   }
 };
 
+// Fungsi LKPD generator
 export const lkpdGenerator = async (req, res) => {
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
   const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
   try {
-    // 1. Ambil data form LKPD
     const {
       jenjang,
       kelas,
@@ -118,12 +117,11 @@ export const lkpdGenerator = async (req, res) => {
       kompetensi,
       petunjuk,
       instruksiTugas,
-      instruksi, // Instruksi khusus
+      instruksi,
     } = req.body;
 
     const mataPelajaran = mapelKustom || mapel;
 
-    // 2. Buat Prompt Engineering KHUSUS untuk LKPD
     const prompt = `
       Anda adalah "Asisten Guru AI" yang ahli dalam merancang Lembar Kerja Peserta Didik (LKPD) yang menarik dan efektif.
       Tugas Anda adalah membuat LKPD yang lengkap dan profesional berdasarkan data berikut.
@@ -169,12 +167,10 @@ export const lkpdGenerator = async (req, res) => {
       Mulai generasi LKPD:
     `;
 
-    // 3. Kirim prompt ke Gemini
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
 
-    // 4. Kirim hasil kembali ke Frontend
     res.status(200).json({
       success: true,
       data: text,
@@ -188,17 +184,16 @@ export const lkpdGenerator = async (req, res) => {
   }
 };
 
+// Fungsi presentasi generator
 export const presentasiGenerator = async (req, res) => {
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
   const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
   try {
-    // 1. Ambil data form
     const { jenjang, kelas, mapel, mapelKustom, topik, tujuan, durasi, instruksi } = req.body;
 
     const mataPelajaran = mapelKustom || mapel;
 
-    // 2. Buat Prompt Engineering KHUSUS untuk Presentasi
     const prompt = `
       Anda adalah "Asisten Guru AI" yang ahli dalam instructional design dan merancang presentasi yang memukau dan efektif.
       Tugas Anda adalah membuat **KERANGKA (OUTLINE) PRESENTASI** yang lengkap, slide demi slide, berdasarkan data berikut.
@@ -242,12 +237,10 @@ export const presentasiGenerator = async (req, res) => {
       Mulai generasi kerangka presentasi:
     `;
 
-    // 3. Kirim prompt ke Gemini
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
 
-    // 4. Kirim hasil kembali ke Frontend
     res.status(200).json({
       success: true,
       data: text,
@@ -261,20 +254,14 @@ export const presentasiGenerator = async (req, res) => {
   }
 };
 
+// Fungsi materi generator
 export const materiGenerator = async (req, res) => {
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
   const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
   try {
-    // 1. Ambil data form
-    const {
-      judul,
-      teksPanjang, // Teks input
-      jenisOutput, // Ringkasan, Poin-poin, dll
-      instruksi,
-    } = req.body;
+    const { judul, teksPanjang, jenisOutput, instruksi } = req.body;
 
-    // 2. Buat Prompt Engineering KHUSUS untuk Teks/Ringkasan
     const prompt = `
       Anda adalah "Asisten Guru AI" yang ahli dalam sintesis informasi, linguistik, dan penulisan materi ajar.
       Tugas Anda adalah mengambil "Teks Panjang/Poin-poin Materi" yang diberikan dan mengubahnya menjadi "Jenis Output" yang diminta.
@@ -308,12 +295,10 @@ export const materiGenerator = async (req, res) => {
       Pastikan hasilnya rapi, terstruktur dengan baik, dan akurat berdasarkan teks input.
     `;
 
-    // 3. Kirim prompt ke Gemini
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
 
-    // 4. Kirim hasil kembali ke Frontend
     res.status(200).json({
       success: true,
       data: text,
@@ -327,12 +312,12 @@ export const materiGenerator = async (req, res) => {
   }
 };
 
+// Fungsi soal generator
 export const soalGenerator = async (req, res) => {
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
   const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
   try {
-    // 1. Ambil data form
     const {
       jenjang,
       bentukSoal,
@@ -342,7 +327,7 @@ export const soalGenerator = async (req, res) => {
       mapel,
       mapelKustom,
       topik,
-      teksRef, // Teks Materi Referensi (Opsional)
+      teksRef,
       instruksi,
     } = req.body;
 
@@ -350,7 +335,6 @@ export const soalGenerator = async (req, res) => {
 
     const mataPelajaran = mapelKustom || mapel;
 
-    // 2. Buat Prompt Engineering KHUSUS untuk SOAL
     const textPrompt = `
       Anda adalah "Asisten Guru AI" yang merupakan ahli dalam evaluasi dan asesmen (pembuatan soal) berdasarkan Taksonomi Bloom.
       Tugas Anda adalah membuat bank soal yang berkualitas tinggi berdasarkan data berikut.
@@ -406,24 +390,20 @@ export const soalGenerator = async (req, res) => {
     const promptParts = [textPrompt];
 
     if (imageFile) {
-      // Jika ada file, konversi dan tambahkan ke prompt array
       const imagePart = fileToGenerativePart(imageFile.buffer, imageFile.mimetype);
       promptParts.push(imagePart);
     }
 
-    // 3. Kirim prompt ke Gemini
     const result = await model.generateContent(promptParts);
     const response = await result.response;
     const text = response.text();
 
-    // 4. Kirim hasil kembali ke Frontend
     res.status(200).json({
       success: true,
       data: text,
     });
   } catch (error) {
     console.error("Error saat menghubungi Gemini (Soal):", error);
-    // Cek error file terlalu besar dari multer
     if (error instanceof multer.MulterError) {
       return res.status(400).json({
         success: false,
@@ -437,25 +417,16 @@ export const soalGenerator = async (req, res) => {
   }
 };
 
+// Fungsi rubrik generator
 export const rubrikGenerator = async (req, res) => {
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
   const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
   try {
-    // 1. Ambil data form
-    const {
-      jenjang,
-      mapel,
-      mapelKustom,
-      jenisTugas,
-      kriteria, // Kriteria Penilaian Spesifik
-      instruksi,
-    } = req.body;
+    const { jenjang, mapel, mapelKustom, jenisTugas, kriteria, instruksi } = req.body;
 
     const mataPelajaran = mapelKustom || mapel;
 
-    // 2. Buat Prompt Engineering KHUSUS untuk RUBRIK
-    // Kita akan PAKSA AI menggunakan format tabel untuk rubrik
     const prompt = `
       Anda adalah "Asisten Guru AI" yang merupakan ahli dalam evaluasi dan perancangan rubrik penilaian (assessment rubric).
       Tugas Anda adalah membuat rubrik penilaian yang komprehensif dan jelas berdasarkan data berikut.
@@ -497,13 +468,10 @@ export const rubrikGenerator = async (req, res) => {
       Mulai generasi rubrik:
     `;
 
-    // 3. Kirim prompt ke Gemini
-    // Kita gunakan model teks biasa, karena rubrik tidak butuh gambar
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
 
-    // 4. Kirim hasil kembali ke Frontend
     res.status(200).json({
       success: true,
       data: text,
@@ -517,17 +485,16 @@ export const rubrikGenerator = async (req, res) => {
   }
 };
 
+// Fungsi ice breaking generator
 export const iceBreakingGenerator = async (req, res) => {
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
   const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
   try {
-    // 1. Ambil data form
     const { jenjang, mapel, mapelKustom, topik, estimasiWaktu, tujuan, instruksi } = req.body;
 
     const mataPelajaran = mapelKustom || mapel;
 
-    // 2. Buat Prompt Engineering KHUSUS untuk ICE BREAKING
     const prompt = `
       Anda adalah "Asisten Guru AI" yang kreatif, energik, dan ahli dalam psikologi pendidikan serta manajemen kelas.
       Tugas Anda adalah membuat ide **Ice Breaking** yang relevan dan menarik berdasarkan data berikut.
@@ -557,12 +524,10 @@ export const iceBreakingGenerator = async (req, res) => {
       Mulai generasi ice breaking:
     `;
 
-    // 3. Kirim prompt ke Gemini
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
 
-    // 4. Kirim hasil kembali ke Frontend
     res.status(200).json({
       success: true,
       data: text,
@@ -576,15 +541,14 @@ export const iceBreakingGenerator = async (req, res) => {
   }
 };
 
+// Fungsi curhat generator
 export const curhatGenerator = async (req, res) => {
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
   const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
   try {
-    // 1. Ambil data form
     const { permasalahan, instruksi } = req.body;
 
-    // 2. Buat Prompt Engineering KHUSUS untuk KONSULTASI
     const prompt = `
       Anda adalah "Sahabat Guru AI", seorang konselor, mentor, dan motivator yang sangat empatik, bijak, dan puitis.
       Tugas Anda adalah mendengarkan permasalahan guru dan merespons dengan 3 bagian yang JELAS.
@@ -609,12 +573,10 @@ export const curhatGenerator = async (req, res) => {
       Mulai respons Anda:
     `;
 
-    // 3. Kirim prompt ke Gemini
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
 
-    // 4. Kirim hasil kembali ke Frontend
     res.status(200).json({
       success: true,
       data: text,

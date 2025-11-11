@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { auth as firebaseAuth } from "../firebase.config";
-import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+// import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+
 import api from "../api/axiosInstance";
 
-// 1. Definisikan Async Thunk untuk Login Password
 export const loginWithPassword = createAsyncThunk(
   "auth/loginWithPassword",
   async (password, { rejectWithValue }) => {
@@ -20,29 +20,26 @@ export const loginWithPassword = createAsyncThunk(
   }
 );
 
-// 2. Definisikan Async Thunk untuk Login Google (KEMBALI KE POPUP)
-export const loginWithGoogle = createAsyncThunk(
-  "auth/loginWithGoogle",
-  async (_, { rejectWithValue }) => {
-    try {
-      const provider = new GoogleAuthProvider();
-      const result = await signInWithPopup(firebaseAuth, provider);
-      return {
-        name: result.user.displayName,
-        photoURL: result.user.photoURL,
-      };
-    } catch (error) {
-      // Ini akan menangkap error "popup-closed-by-user"
-      return rejectWithValue({ message: error.code || error.message });
-    }
-  }
-);
+// export const loginWithGoogle = createAsyncThunk(
+//   "auth/loginWithGoogle",
+//   async (_, { rejectWithValue }) => {
+//     try {
+//       const provider = new GoogleAuthProvider();
+//       const result = await signInWithPopup(firebaseAuth, provider);
+//       return {
+//         name: result.user.displayName,
+//         photoURL: result.user.photoURL,
+//       };
+//     } catch (error) {
+//       return rejectWithValue({ message: error.code || error.message });
+//     }
+//   }
+// );
 
-// 3. Definisikan Initial State
 const initialState = {
   isLoggedIn: false,
   user: null,
-  status: "idle", // <-- Sudah benar 'idle'
+  status: "idle",
   error: null,
 };
 
@@ -67,7 +64,7 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Kasus Login Password
+      // Login dengan password slice
       .addCase(loginWithPassword.pending, (state) => {
         state.status = "loading";
         state.error = null;
@@ -84,25 +81,25 @@ const authSlice = createSlice({
         state.status = "failed";
         state.isLoggedIn = false;
         state.error = action.payload.message || "Password salah.";
-      })
-      // Kasus Login Google (dengan Popup)
-      .addCase(loginWithGoogle.pending, (state) => {
-        state.status = "loading";
-        state.error = null;
-      })
-      .addCase(loginWithGoogle.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.isLoggedIn = true;
-        state.user = {
-          name: action.payload.name,
-          photoURL: action.payload.photoURL,
-        };
-      })
-      .addCase(loginWithGoogle.rejected, (state, action) => {
-        state.status = "failed";
-        state.isLoggedIn = false;
-        state.error = action.payload.message || "Gagal login dengan Google.";
       });
+    // Login dengan google slice
+    // .addCase(loginWithGoogle.pending, (state) => {
+    //   state.status = "loading";
+    //   state.error = null;
+    // })
+    // .addCase(loginWithGoogle.fulfilled, (state, action) => {
+    //   state.status = "succeeded";
+    //   state.isLoggedIn = true;
+    //   state.user = {
+    //     name: action.payload.name,
+    //     photoURL: action.payload.photoURL,
+    //   };
+    // })
+    // .addCase(loginWithGoogle.rejected, (state, action) => {
+    //   state.status = "failed";
+    //   state.isLoggedIn = false;
+    //   state.error = action.payload.message || "Gagal login dengan Google.";
+    // });
   },
 });
 

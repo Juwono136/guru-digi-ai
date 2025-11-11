@@ -1,22 +1,24 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { generateSoal } from "../store/generatorSlice"; // <-- Aksi generateSoal
 import toast from "react-hot-toast";
+
+// Assets and icons
 import { FiZap, FiChevronDown, FiUpload, FiX, FiPaperclip } from "react-icons/fi";
 
-// Terima props yang sama persis dengan form lainnya
+// Features
+import { generateSoal } from "../store/generatorSlice";
+
 const SoalForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
   const dispatch = useDispatch();
   const { status } = useSelector((state) => state.generator);
   const isLoading = status === "loading";
 
-  // State diganti untuk field Soal
   const [formData, setFormData] = useState({
     jenjang: "",
     bentukSoal: "",
-    tingkatKesulitan: "Sedang", // Default
-    taksonomiBloom: "C3 (Mengaplikasikan)", // Default
-    jumlahSoal: 10, // Default
+    tingkatKesulitan: "Sedang",
+    taksonomiBloom: "C3 (Mengaplikasikan)",
+    jumlahSoal: 10,
     mapel: "",
     mapelKustom: "",
     topik: "",
@@ -24,11 +26,9 @@ const SoalForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
     instruksi: "",
   });
 
-  // State untuk file (disiapkan untuk nanti)
   const [file, setFile] = useState(null);
   const [fileName, setFileName] = useState("");
 
-  // Handler ini sama persis
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -38,16 +38,17 @@ const SoalForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
-      // Validasi Ukuran (2MB)
+      // Validasi ukuran (2MB)
       if (selectedFile.size > 2 * 1024 * 1024) {
         toast.error("File terlalu besar! Maksimal 2MB.");
-        e.target.value = null; // Reset input
+        e.target.value = null;
         return;
       }
-      // Validasi Tipe
+
+      // Validasi tipe
       if (!["image/jpeg", "image/png", "image/jpg"].includes(selectedFile.type)) {
         toast.error("Format file salah! Hanya JPG, JPEG, atau PNG.");
-        e.target.value = null; // Reset input
+        e.target.value = null;
         return;
       }
 
@@ -57,9 +58,6 @@ const SoalForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
     }
   };
 
-  // (Kita tidak perlu handleJenjangChange karena tidak ada field Kelas)
-
-  // Handler Submit diubah untuk Soal
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.jenjang || !formData.topik || !formData.jumlahSoal) {
@@ -67,22 +65,17 @@ const SoalForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
       return;
     }
 
-    // 1. Buat objek FormData
     const data = new FormData();
 
-    // 2. Masukkan semua data teks dari state 'formData'
     Object.keys(formData).forEach((key) => {
       data.append(key, formData[key]);
     });
 
-    // 3. Masukkan file (jika ada)
     if (file) {
-      // 'imageFile' harus sama dengan nama di backend (multer.single('imageFile'))
       data.append("imageFile", file);
     }
 
     toast.success("Permintaan Bank Soal dikirim ke AI...");
-    // 4. Dispatch 'data' (FormData object), BUKAN 'formData' (JSON object)
     dispatch(generateSoal(data));
 
     setIsFormDirty(false);
@@ -93,14 +86,13 @@ const SoalForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 p-1">
-      {/* Baris 1: Jenjang & Bentuk Soal (Grid 2-col) */}
       <div className="grid grid-cols-2 gap-4">
         <div className="relative">
           <label className="block text-sm font-medium text-gray-700 mb-1">Jenjang</label>
           <select
             name="jenjang"
             value={formData.jenjang}
-            onChange={handleChange} // Ganti ke handleChange biasa
+            onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">Pilih Jenjang</option>
@@ -129,7 +121,6 @@ const SoalForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         </div>
       </div>
 
-      {/* Baris 2: Kesulitan & Taksonomi (Grid 2-col) */}
       <div className="grid grid-cols-2 gap-4">
         <div className="relative">
           <label className="block text-sm font-medium text-gray-700 mb-1">Kesulitan</label>
@@ -164,8 +155,6 @@ const SoalForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         </div>
       </div>
 
-      {/* Baris 3: Jumlah Soal (Full-width, tapi kita pasangkan dengan field kosong agar rapi) */}
-      {/* Mari kita buat full-width saja agar konsisten dengan Mapel */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Jumlah Soal (Maks 50)
@@ -181,7 +170,6 @@ const SoalForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         />
       </div>
 
-      {/* Baris 4: Mata Pelajaran (Salin) */}
       <div className="relative">
         <label className="block text-sm font-medium text-gray-700 mb-1">Mata Pelajaran</label>
         <select
@@ -200,7 +188,6 @@ const SoalForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         <FiChevronDown className="absolute right-3 top-9 h-5 w-5 text-gray-400 pointer-events-none" />
       </div>
 
-      {/* Baris 5: Mapel Kustom (Salin) */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Mata Pelajaran Kustom (Opsional)
@@ -215,10 +202,8 @@ const SoalForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         />
       </div>
 
-      {/* Pemisah seperti di LKPD */}
       <hr className="my-4 border-t border-gray-200" />
 
-      {/* Baris 6: Topik/Kata Kunci (WAJIB) */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Topik/Kata Kunci Soal (Wajib)
@@ -233,7 +218,6 @@ const SoalForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         />
       </div>
 
-      {/* Baris 7: Teks Materi Referensi (Opsional) */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Teks Materi Referensi (Opsional)
@@ -248,12 +232,10 @@ const SoalForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         ></textarea>
       </div>
 
-      {/* Baris 8: Upload Foto (FITUR BELUM AKTIF) */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Upload Foto Materi (Opsional)
         </label>
-        {/* Input file yang disembunyikan */}
         <input
           type="file"
           id="file-upload"
@@ -262,7 +244,6 @@ const SoalForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
           onChange={handleFileChange}
         />
 
-        {/* Tombol Upload Kustom */}
         <label
           htmlFor="file-upload"
           className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md cursor-pointer hover:border-blue-500"
@@ -279,7 +260,6 @@ const SoalForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
           </div>
         </label>
 
-        {/* Tampilan File Terpilih */}
         {fileName && (
           <div className="mt-2 flex items-center justify-between p-2 bg-gray-100 rounded-md">
             <div className="flex items-center space-x-2 truncate">
@@ -301,7 +281,6 @@ const SoalForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         )}
       </div>
 
-      {/* Baris 9: Instruksi Khusus (Opsional) */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Instruksi Khusus (Opsional)
@@ -316,7 +295,6 @@ const SoalForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         ></textarea>
       </div>
 
-      {/* Tombol Submit */}
       <button
         type="submit"
         disabled={isLoading}

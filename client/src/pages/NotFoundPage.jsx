@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
-import { FiFrown } from "react-icons/fi"; // Ikon untuk 404
+
+// Assets and icons
+import { FiFrown } from "react-icons/fi";
 
 const NotFoundPage = () => {
   return (
@@ -11,10 +13,6 @@ const NotFoundPage = () => {
         Maaf, halaman yang Anda cari tidak ada atau telah dipindahkan.
       </p>
 
-      {/* Tombol ini akan mengarahkan pengguna kembali ke halaman utama.
-          ProtectedRoute akan otomatis mengarahkan ke /dashboard jika sudah login,
-          atau ke /login jika belum.
-      */}
       <Link
         to="/login"
         className="px-6 py-3 bg-blue-600 text-white rounded-md font-semibold hover:bg-blue-700 transition duration-300"

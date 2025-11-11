@@ -1,16 +1,18 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { generateCurhat } from "../store/generatorSlice"; // <-- Aksi baru
 import toast from "react-hot-toast";
+
+// Assets and icons
 import { FiZap } from "react-icons/fi";
 
-// Terima props yang sama persis dengan form lainnya
+// Features
+import { generateCurhat } from "../store/generatorSlice";
+
 const CurhatForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
   const dispatch = useDispatch();
   const { status } = useSelector((state) => state.generator);
   const isLoading = status === "loading";
 
-  // State diganti untuk field Curhat
   const [formData, setFormData] = useState({
     permasalahan: "",
     instruksi: "",
@@ -22,7 +24,6 @@ const CurhatForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
     if (!isFormDirty) setIsFormDirty(true);
   };
 
-  // Handler Submit diubah untuk Curhat
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.permasalahan) {
@@ -31,7 +32,7 @@ const CurhatForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
     }
 
     toast.success("Permintaan Anda sedang diproses...");
-    dispatch(generateCurhat(formData)); // <-- Dispatch aksi baru
+    dispatch(generateCurhat(formData));
 
     setIsFormDirty(false);
     if (window.innerWidth < 1024) {
@@ -41,13 +42,11 @@ const CurhatForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 p-1">
-      {/* Keterangan */}
       <div className="p-3 bg-blue-50 border border-blue-200 rounded-md text-sm text-blue-700">
         Ceritakan permasalahan, tantangan, atau kebingungan Anda. Saya akan membantu memberikan
         solusi konkret, dukungan, dan <strong>untaian motivasi puitis</strong>.
       </div>
 
-      {/* Baris 1: Permasalahan Anda */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">Permasalahan Anda</label>
         <textarea
@@ -60,7 +59,6 @@ const CurhatForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         ></textarea>
       </div>
 
-      {/* Baris 2: Instruksi Khusus (Opsional) */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Instruksi Khusus (Opsional)
@@ -75,7 +73,6 @@ const CurhatForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         ></textarea>
       </div>
 
-      {/* Tombol Submit */}
       <button
         type="submit"
         disabled={isLoading}

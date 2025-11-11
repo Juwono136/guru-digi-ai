@@ -1,16 +1,18 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { generateMateri } from "../store/generatorSlice"; // <-- Aksi baru
 import toast from "react-hot-toast";
+
+// Assets and icons
 import { FiZap, FiChevronDown } from "react-icons/fi";
 
-// Terima props yang sama persis dengan form lainnya
+// Features
+import { generateMateri } from "../store/generatorSlice";
+
 const MateriForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
   const dispatch = useDispatch();
   const { status } = useSelector((state) => state.generator);
   const isLoading = status === "loading";
 
-  // State diganti untuk field Materi
   const [formData, setFormData] = useState({
     judul: "",
     teksPanjang: "",
@@ -24,7 +26,6 @@ const MateriForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
     if (!isFormDirty) setIsFormDirty(true);
   };
 
-  // Handler Submit diubah untuk Materi
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.judul || !formData.teksPanjang || !formData.jenisOutput) {
@@ -32,7 +33,7 @@ const MateriForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
       return;
     }
     toast.success("Permintaan Teks/Ringkasan dikirim ke AI...");
-    dispatch(generateMateri(formData)); // <-- Dispatch aksi baru
+    dispatch(generateMateri(formData));
     setIsFormDirty(false);
     if (window.innerWidth < 1024) {
       setIsFormVisible(false);
@@ -41,7 +42,6 @@ const MateriForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 p-1">
-      {/* Baris 1: Judul Bahan Ajar */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">Judul Bahan Ajar</label>
         <input
@@ -54,7 +54,6 @@ const MateriForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         />
       </div>
 
-      {/* Baris 2: Teks Panjang/Poin-poin */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Teks Panjang atau Poin-poin Materi
@@ -69,7 +68,6 @@ const MateriForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         ></textarea>
       </div>
 
-      {/* Baris 3: Jenis Output */}
       <div className="relative">
         <label className="block text-sm font-medium text-gray-700 mb-1">Jenis Output</label>
         <select
@@ -87,7 +85,6 @@ const MateriForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         <FiChevronDown className="absolute right-3 top-9 h-5 w-5 text-gray-400 pointer-events-none" />
       </div>
 
-      {/* Baris 4: Instruksi Khusus */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Instruksi Khusus (Opsional)
@@ -102,7 +99,6 @@ const MateriForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         ></textarea>
       </div>
 
-      {/* Tombol Submit */}
       <button
         type="submit"
         disabled={isLoading}

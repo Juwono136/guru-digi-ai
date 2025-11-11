@@ -7,17 +7,15 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     proxy: {
-      // Jika frontend (di localhost:5173) memanggil '/api/...'
-      // Vite akan meneruskannya ke server backend Anda
       "/api": {
-        target: "http://localhost:5000", // Alamat backend Anda
-        changeOrigin: true, // Diperlukan untuk vVirtual host
-        secure: false, // Abaikan jika backend Anda http (bukan https)
+        target: "http://localhost:5000",
+        changeOrigin: true,
+        secure: false,
       },
     },
   },
   build: {
     outDir: "dist",
-    emptyOutDir: true, // Clean the dist folder before building
+    emptyOutDir: true,
   },
 });

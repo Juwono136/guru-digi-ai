@@ -1,31 +1,32 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { generatePresentasi } from "../store/generatorSlice"; // <-- Aksi baru
 import toast from "react-hot-toast";
+
+// Assets and icons
 import { FiZap, FiChevronDown } from "react-icons/fi";
 
-// Data untuk dropdown dinamis (sama)
+// Features
+import { generatePresentasi } from "../store/generatorSlice";
+
 const kelasData = {
   SD: ["1", "2", "3", "4", "5", "6"],
   SMP: ["7", "8", "9"],
   SMA: ["10", "11", "12"],
 };
 
-// Terima props yang sama persis dengan ModulAjarForm
 const PresentasiForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
   const dispatch = useDispatch();
   const { status } = useSelector((state) => state.generator);
   const isLoading = status === "loading";
 
-  // State diganti untuk field Presentasi
   const [formData, setFormData] = useState({
     jenjang: "",
     kelas: "",
     mapel: "",
     mapelKustom: "",
-    topik: "", // <-- Field baru
-    tujuan: "", // <-- Field baru
-    durasi: "", // <-- Field baru
+    topik: "",
+    tujuan: "",
+    durasi: "",
     instruksi: "",
   });
   const [kelasOptions, setKelasOptions] = useState([]);
@@ -47,16 +48,14 @@ const PresentasiForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
     if (!isFormDirty) setIsFormDirty(true);
   };
 
-  // Handler Submit diubah untuk Presentasi
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Validasi diubah ke field Presentasi
     if (!formData.jenjang || !formData.kelas || !formData.topik) {
       toast.error("Jenjang, Kelas, dan Topik Presentasi wajib diisi!");
       return;
     }
     toast.success("Permintaan Kerangka Presentasi dikirim ke AI...");
-    dispatch(generatePresentasi(formData)); // <-- Dispatch aksi baru
+    dispatch(generatePresentasi(formData));
     setIsFormDirty(false);
     if (window.innerWidth < 1024) {
       setIsFormVisible(false);
@@ -65,7 +64,6 @@ const PresentasiForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 p-1">
-      {/* Baris 1: Jenjang & Kelas (Salin) */}
       <div className="grid grid-cols-2 gap-4">
         <div className="relative">
           <label className="block text-sm font-medium text-gray-700 mb-1">Jenjang</label>
@@ -102,7 +100,6 @@ const PresentasiForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         </div>
       </div>
 
-      {/* Baris 2: Mata Pelajaran (Salin) */}
       <div className="relative">
         <label className="block text-sm font-medium text-gray-700 mb-1">Mata Pelajaran</label>
         <select
@@ -121,7 +118,6 @@ const PresentasiForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         <FiChevronDown className="absolute right-3 top-9 h-5 w-5 text-gray-400 pointer-events-none" />
       </div>
 
-      {/* Baris 3: Mapel Kustom (Salin) */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Mata Pelajaran Kustom (Opsional)
@@ -136,10 +132,8 @@ const PresentasiForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         />
       </div>
 
-      {/* --- Bagian B: Info Spesifik Presentasi --- */}
       <hr className="my-4 border-t border-gray-200" />
 
-      {/* Baris 4: Topik/Judul Presentasi */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Topik/Judul Presentasi
@@ -154,7 +148,6 @@ const PresentasiForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         />
       </div>
 
-      {/* Baris 5: Tujuan Pembelajaran Presentasi */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Tujuan Pembelajaran Presentasi
@@ -169,7 +162,6 @@ const PresentasiForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         ></textarea>
       </div>
 
-      {/* Baris 6: Estimasi Durasi */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Estimasi Durasi Presentasi
@@ -184,7 +176,6 @@ const PresentasiForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         />
       </div>
 
-      {/* Baris 7: Instruksi Khusus (Sama) */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Instruksi Khusus (Opsional)
@@ -199,14 +190,12 @@ const PresentasiForm = ({ isFormDirty, setIsFormDirty, setIsFormVisible }) => {
         ></textarea>
       </div>
 
-      {/* Tombol Submit */}
       <button
         type="submit"
         disabled={isLoading}
         className="w-full flex justify-center items-center bg-blue-600 text-white py-3 rounded-md font-semibold hover:bg-blue-700 transition duration-300 disabled:opacity-50"
       >
         <FiZap className="mr-2" />
-        {/* Ganti teks tombol */}
         {isLoading ? "Sedang Membuat..." : "Hasilkan Kerangka Presentasi"}
       </button>
     </form>
