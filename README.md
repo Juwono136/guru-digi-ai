@@ -175,5 +175,5 @@ npm start
 <img width="1912" height="961" alt="image" src="https://github.com/user-attachments/assets/ed38b079-9b9e-4644-8625-b2e2d18db193" />
 
 - Dashboard Page
-<img width="1920" height="1389" alt="image" src="https://github.com/user-attachments/assets/131db7d9-8703-4522-b799-a15d4d967f21" />
+<img width="1920" height="1301" alt="image" src="https://github.com/user-attachments/assets/0abbfbf9-1040-462d-a3ca-6af2ee454627" />
 
