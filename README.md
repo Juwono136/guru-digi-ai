@@ -1,4 +1,6 @@
 # Guru Digi AI - Asisten Guru AI
+![guru-digi-ai](https://github.com/user-attachments/assets/86dd056d-67f3-4a7a-8ac4-6d1f6f7b83eb)
+
 
 ## Pendahuluan
 Asisten Guru AI adalah aplikasi web full-stack yang dirancang untuk membantu para guru dalam tugas-tugas administratif dan kreatif. Aplikasi ini menyediakan berbagai generator berbasis AI untuk membuat modul ajar, LKPD, bank soal (termasuk upload gambar), rubrik penilaian, dan banyak lagi.
